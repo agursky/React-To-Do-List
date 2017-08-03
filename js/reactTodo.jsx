@@ -8,18 +8,34 @@ function ToDoList(props) {
         </ul>);
 }
 
+function AddTaskForm(props) {
+    return (
+            <form>
+                <input type='text' placeholder="Add Task Here..." onChange={props.inputChange} value={props.inputValue}/>
+                <button type='submit' onClick={props.onAdd}>Add Item</button>
+            </form>
+    );
+}
+
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            set: listOfTasks
+            set: listOfTasks,
+            inputValue: ""
         };
         this.addItem = this.addItem.bind(this);
+        this.inputChange = this.inputChange.bind(this);
     }
     
-    addItem() {
-        listOfTasks.push(' new item');
-        this.setState({set: listOfTasks});
+    addItem(e) {
+        e.preventDefault();
+        listOfTasks.push(this.state.inputValue);
+        this.setState({set: listOfTasks, inputValue: ''});
+    }
+    
+    inputChange(e) {
+        this.setState({inputValue: e.target.value});
     }
     
     render() {
@@ -27,7 +43,7 @@ class App extends React.Component {
             <div>
                 <h3>To Do List</h3>
                 <ToDoList tasks={this.state.set}/>
-                <button onClick={this.addItem}>Add Item</button>
+                <AddTaskForm onAdd={this.addItem} inputChange={this.inputChange} inputValue={this.state.inputValue}/>
             </div>
         );
     }
